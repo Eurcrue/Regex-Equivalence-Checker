@@ -7,6 +7,6 @@ This program is mainly based on <https://github.com/felipemoura/RegularExpressio
 * Fixed problem with NFA-DFA algorithm
 * Added a method that checks for Regex Equivalence
 * Added a method that finds a string to prove inequality
-* Created a UI
-       * Added functionality to expand alphabet
+* Created a GUI
+* Added functionality to expand alphabet
 
