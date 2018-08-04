@@ -3,7 +3,7 @@ A program that checks if two regex are equivalent.
 
 This program is mainly based on <https://github.com/felipemoura/RegularExpression-to-NFA-to-DFA>
 
-# Changes
+## Changes
 
 Changes from Felipe Moura's version:
 
@@ -13,3 +13,7 @@ Changes from Felipe Moura's version:
 * Created a GUI
 * Added functionality to expand alphabet
 
+## Update Log
+
+* 8/4/2018 - Recognizes regex syntax errors, actual help page
+* 8/3/2018 - First upload
