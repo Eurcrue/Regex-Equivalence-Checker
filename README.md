@@ -3,6 +3,8 @@ A program that checks if two regex are equivalent.
 
 This program is mainly based on <https://github.com/felipemoura/RegularExpression-to-NFA-to-DFA>
 
+Download the .jar file and read <https://github.com/Eurcrue/Regex-Equivalence-Checker/wiki/Help> for help. Also accessible once running the .jar under Options -> Help
+
 ## Changes
 
 Changes from Felipe Moura's version:
