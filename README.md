@@ -17,5 +17,6 @@ Changes from Felipe Moura's version:
 
 ## Update Log
 
+* 8/30/2018 - Improved syntax error detection, recognizes 
 * 8/4/2018 - Recognizes regex syntax errors, actual help page
 * 8/3/2018 - First upload
