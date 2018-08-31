@@ -306,6 +306,50 @@ public class RegularExpression {
 		
 	}
 	
+	/**
+	 * Checks if a regex matches a string
+	 * 
+	 * @param regex the regular expression
+	 * @param testString the string to test
+	 * @return whether or not the regex matches the testString
+	 */
+	public static boolean match (String regex, String testString){
+		DFA dfa = generateDFA(generateNFA(regex));
+		State current = dfa.getDfa().getFirst();
+		
+		//runs through the DFA
+		for(int i = 0; i < testString.length(); i++){
+			if(testString.charAt(i) == '~') continue;
+			if(!isInputCharacter(testString.charAt(i))){
+				System.out.println("bad");
+				return false;
+			}
+			current = current.getAllTransitions(testString.charAt(i)).get(0);
+		}
+		return current.isAcceptState();
+	}
+	
+	public static String DFAToRegex(DFA dfa){
+		String regex = "";
+		List<ArrayList<Integer>> adList = new ArrayList<ArrayList<Integer>>();//creates adjacency list
+		List<Integer> visited = new ArrayList<Integer>();
+		for(int i = 0; i < dfa.getDfa().size(); i++) adList.add(new ArrayList<Integer>());
+		for(int i = 0; i < dfa.getDfa().size(); i++){
+			for(char c : input){
+				adList.get(i).add(dfa.getDfa().indexOf(dfa.getDfa().get(i).getAllTransitions(c).get(0)));
+			}
+		}
+		
+		List<ArrayList<Integer>> reverse = new ArrayList<ArrayList<Integer>>();//reversed adjacency list to traceback
+		for(int i = 0; i < dfa.getDfa().size(); i++) reverse.add(new ArrayList<Integer>());
+		for(int i = 0; i < adList.size(); i++){
+			for(int j = 0; j < adList.get(i).size(); j++){
+				if(!reverse.get(adList.get(i).get(j)).contains(i)) reverse.get(adList.get(i).get(j)).add(i);
+			}
+		}
+		return regex;
+	}
+	
 	// Priority of operands
 	private static boolean Priority (char first, Character second) {
 		if(first == second) {	return true;	}
@@ -337,10 +381,64 @@ public class RegularExpression {
 	
 				default :
 					System.out.println("Unkown Symbol !");
-					System.exit(1);
-					break;			
+					//System.exit(1);
+					throw new RuntimeException();			
 			}
 		}
+	}
+	
+	/**
+	 * Rewrites a regex as to remove "+" and "?"
+	 * @param regex the regex to be translated
+	 * @return an equivalent regex without "+" and "?"
+	 */
+	public static String reWrite(String regex) {
+		if(!regex.contains("?") && !regex.contains("+")) return regex;
+		String[] exceptions = { "(?", "|?", ".?", "(+", "|+", ".+" };
+		for (String s : exceptions) {
+			if (regex.contains(s))
+				throw new RuntimeException();
+		}
+		String test = "";
+		for (int i = 0; i < regex.length(); i++) {
+			if (regex.charAt(i) != '?' && regex.charAt(i) != '+')
+				test += regex.charAt(i);
+		}
+		RegularExpression.generateNFA(test);
+
+		String subregex = "";
+		int parenCount = 0;
+		int length = 0;
+		String ret = regex;
+		char current = ' ';
+		for (int i = 1; i < ret.length(); i++) {
+			if (ret.charAt(i) == '?' || ret.charAt(i) == '+') {
+				subregex = "";
+				parenCount = 0;
+				length = 0;
+				if (ret.charAt(i - 1) == '*') {
+					subregex = "*";
+					length++;
+				}
+				do {
+					current = ret.charAt(i - ++length);
+					if (current == ')')
+						parenCount++;
+					if (current == '(')
+						parenCount--;
+					subregex = current + subregex;
+				} while (parenCount != 0);
+
+				if (ret.charAt(i) == '?') {
+					subregex = "((" + subregex + ")|~)";
+				} else {
+					subregex = subregex + subregex + "*";
+				}
+
+				ret = ret.substring(0, i - length) + subregex + ret.substring(i + 1);
+			}
+		}
+		return ret;
 	}
 		
 	// Do the star operation
@@ -466,7 +564,7 @@ public class RegularExpression {
 	}
 
 	// Return true if is part of the automata Language else is false
-	private static boolean isInputCharacter(char charAt) {
+	public static boolean isInputCharacter(char charAt) {
 		return input.contains(charAt) || charAt == '~';
 	}
 
