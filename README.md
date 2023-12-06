@@ -5,6 +5,8 @@ This program is mainly based on <https://github.com/felipemoura/RegularExpressio
 
 Download the .jar file and read <https://github.com/Eurcrue/Regex-Equivalence-Checker/wiki/Help> for help. Also accessible once running the .jar under Options -> Help
 
+A web application has been developed in JavaScript: <https://reynaldoliveria.com/projects/regex-eq-checker/>
+
 ## Changes
 
 Changes from Felipe Moura's version:
